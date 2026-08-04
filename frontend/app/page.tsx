@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main>
-      <h1>djangobnb</h1>
+      <h1 className="text-airbnb">djangobnb</h1>
     </main>
   );
 }
