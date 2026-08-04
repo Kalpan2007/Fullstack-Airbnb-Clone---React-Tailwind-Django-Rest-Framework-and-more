@@ -1,9 +1,11 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import MenuLink from "./MenuLink";
 
 const UserNav = () => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -43,6 +45,27 @@ const UserNav = () => {
 
       {isOpen && (
         <div className="w-[220px] absolute top-[60px] right-0 bg-white border rounded-xl shadow-md flex flex-col cursor-pointer">
+          <MenuLink
+            label="Inbox"
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/inbox");
+            }}
+          />
+          <MenuLink
+            label="My properties"
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/myproperties");
+            }}
+          />
+          <MenuLink
+            label="My reservations"
+            onClick={() => {
+              setIsOpen(false);
+              router.push("/myreservations");
+            }}
+          />
           <MenuLink label="Log in" onClick={() => setIsOpen(false)} />
           <MenuLink label="Sign up" onClick={() => setIsOpen(false)} />
         </div>
