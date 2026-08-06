@@ -38,5 +38,5 @@ def api_root(request):
 urlpatterns = [
     path('', api_root, name='api-root'),
     path('admin/', admin.site.urls),
-    path('api/', include('rest_framework.urls')),
+    path('api/', include('property.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
