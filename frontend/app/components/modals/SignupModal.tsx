@@ -4,6 +4,8 @@ import Modal from "./Modal";
 import { useState } from "react";
 import useSignupModal from "@/app/hooks/useSignupModal";
 import CustomButton from "../forms/CustomButton";
+import apiService from "@/app/services/apiService";
+import { handleLogin } from "@/app/lib/actions";
 
 const SignupModal = () => {
   const signupModal = useSignupModal();
@@ -12,7 +14,7 @@ const SignupModal = () => {
   const [password2, setPassword2] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
 
-  const submitSignup = () => {
+  const submitSignup = async () => {
     console.log("clicked signup", { email, password1, password2 });
 
     if (password1 !== password2) {
@@ -20,8 +22,41 @@ const SignupModal = () => {
       return;
     }
 
-    setErrors([]);
-    signupModal.close();
+    const formData = {
+      email: email,
+      password1: password1,
+      password2: password2,
+    };
+
+    const response = await apiService.postWithoutToken(
+      "/api/register/",
+      JSON.stringify(formData)
+    );
+
+    console.log("Signup response:", response);
+
+    if (response.access) {
+      await handleLogin(response.user.pk, response.access, response.refresh);
+      setErrors([]);
+      signupModal.close();
+      window.location.reload();
+    } else {
+      const errorMessages: string[] = [];
+      if (response.non_field_errors) {
+        errorMessages.push(...response.non_field_errors);
+      }
+      Object.keys(response).forEach((key) => {
+        if (key !== "non_field_errors") {
+          const fieldErrors = response[key];
+          if (Array.isArray(fieldErrors)) {
+            fieldErrors.forEach((err: string) => {
+              errorMessages.push(`${key}: ${err}`);
+            });
+          }
+        }
+      });
+      setErrors(errorMessages);
+    }
   };
 
   const content = (

@@ -4,6 +4,8 @@ import Modal from "./Modal";
 import { useState } from "react";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import CustomButton from "../forms/CustomButton";
+import apiService from "@/app/services/apiService";
+import { handleLogin } from "@/app/lib/actions";
 
 const LoginModal = () => {
   const loginModal = useLoginModal();
@@ -11,10 +13,43 @@ const LoginModal = () => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState<string[]>([]);
 
-  const submitLogin = () => {
+  const submitLogin = async () => {
     console.log("clicked login", { email, password });
-    setErrors([]);
-    loginModal.close();
+
+    const formData = {
+      email: email,
+      password: password,
+    };
+
+    const response = await apiService.postWithoutToken(
+      "/api/login/",
+      JSON.stringify(formData)
+    );
+
+    console.log("Login response:", response);
+
+    if (response.access) {
+      await handleLogin(response.user.pk, response.access, response.refresh);
+      setErrors([]);
+      loginModal.close();
+      window.location.reload();
+    } else {
+      const errorMessages: string[] = [];
+      if (response.non_field_errors) {
+        errorMessages.push(...response.non_field_errors);
+      }
+      Object.keys(response).forEach((key) => {
+        if (key !== "non_field_errors") {
+          const fieldErrors = response[key];
+          if (Array.isArray(fieldErrors)) {
+            fieldErrors.forEach((err: string) => {
+              errorMessages.push(`${key}: ${err}`);
+            });
+          }
+        }
+      });
+      setErrors(errorMessages);
+    }
   };
 
   const content = (

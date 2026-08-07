@@ -38,7 +38,6 @@ def api_root(request):
 urlpatterns = [
     path('', api_root, name='api-root'),
     path('admin/', admin.site.urls),
-    path('api/', include('dj_rest_auth.urls')),
-    path('api/auth/', include('allauth.urls')),
+    path('api/', include('useraccount.urls')),
     path('api/properties/', include('property.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
