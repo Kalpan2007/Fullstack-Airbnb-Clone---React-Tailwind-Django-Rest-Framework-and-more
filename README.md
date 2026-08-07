@@ -27,7 +27,7 @@
 - [x] Create custom User model
 - [x] Create Properties app
 - [x] Create Property model and serializer
-- [ ] Fetch properties in the frontend
+- [x] Fetch properties in the frontend
 
 ---
 
@@ -35,9 +35,9 @@
 
 ### Authentication
 
-- [ ] Login
-- [ ] Sign Up
-- [ ] Logout
+- [x] Login
+- [x] Sign Up
+- [x] Logout
 
 ### Properties
 
