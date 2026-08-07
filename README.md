@@ -24,9 +24,9 @@
 - [x] Set up Django with Docker and PostgreSQL
   - [x] Install Django REST Framework (DRF)
   - [x] Configure CORS Headers
-- [ ] Create custom User model
-- [ ] Create Properties app
-- [ ] Create Property model and serializer
+- [x] Create custom User model
+- [x] Create Properties app
+- [x] Create Property model and serializer
 - [ ] Fetch properties in the frontend
 
 ---

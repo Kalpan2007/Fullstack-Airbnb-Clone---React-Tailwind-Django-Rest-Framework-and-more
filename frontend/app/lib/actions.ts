@@ -1,0 +1,102 @@
+'use server';
+
+import { cookies } from 'next/headers';
+
+export async function handleRefresh() {
+    console.log('handleRefresh');
+
+    const refreshToken = await getRefreshToken();
+
+    if (!refreshToken) {
+        return null;
+    }
+
+    try {
+        const response = await fetch('http://localhost:8000/api/token/refresh/', {
+            method: 'POST',
+            body: JSON.stringify({
+                refresh: refreshToken
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+
+        const json = await response.json();
+        console.log('Response - Refresh:', json);
+
+        if (json.access) {
+            const c = await cookies();
+            c.set('session_access_token', json.access, {
+                httpOnly: true,
+                secure: false,
+                maxAge: 60 * 60,
+                path: '/'
+            });
+
+            return json.access;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.log('error', error);
+        return null;
+    }
+}
+
+export async function handleLogin(userId: string, accessToken: string, refreshToken: string) {
+    const c = await cookies();
+
+    c.set('session_userid', userId, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/'
+    });
+
+    c.set('session_access_token', accessToken, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 60 * 60,
+        path: '/'
+    });
+
+    c.set('session_refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 60 * 60 * 24 * 7,
+        path: '/'
+    });
+}
+
+export async function resetAuthCookies() {
+    const c = await cookies();
+    c.set('session_userid', '');
+    c.set('session_access_token', '');
+    c.set('session_refresh_token', '');
+}
+
+export async function getUserId() {
+    const c = await cookies();
+    const userId = c.get('session_userid')?.value
+    return userId ? userId : null
+}
+
+export async function getAccessToken() {
+    const c = await cookies();
+    let accessToken = c.get('session_access_token')?.value;
+
+    if (!accessToken) {
+        accessToken = await handleRefresh();
+    }
+
+    return accessToken || null;
+}
+
+export async function getRefreshToken() {
+    const c = await cookies();
+    let refreshToken = c.get('session_refresh_token')?.value;
+
+    return refreshToken || null;
+}
