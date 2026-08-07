@@ -77,6 +77,28 @@ export async function resetAuthCookies() {
     c.set('session_refresh_token', '');
 }
 
+export async function handleLogout() {
+    const c = await cookies();
+    const refreshToken = c.get('session_refresh_token')?.value;
+
+    if (refreshToken) {
+        try {
+            await fetch('http://localhost:8000/api/logout/', {
+                method: 'POST',
+                body: JSON.stringify({ refresh: refreshToken }),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
+        } catch (error) {
+            console.log('Logout error:', error);
+        }
+    }
+
+    resetAuthCookies();
+}
+
 export async function getUserId() {
     const c = await cookies();
     const userId = c.get('session_userid')?.value

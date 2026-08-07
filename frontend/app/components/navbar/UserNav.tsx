@@ -1,14 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter, usePathname } from "next/navigation";
 import MenuLink from "./MenuLink";
 import useLoginModal from "@/app/hooks/useLoginModal";
 import useSignupModal from "@/app/hooks/useSignupModal";
+import { handleLogout, getUserId } from "@/app/lib/actions";
 
 const UserNav = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const loginModal = useLoginModal();
   const signupModal = useSignupModal();
   const [isOpen, setIsOpen] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const checkUser = async () => {
+    const id = await getUserId();
+    setUserId(id);
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, [pathname]);
+
+  const logout = async () => {
+    await handleLogout();
+    setUserId(null);
+    setIsOpen(false);
+    router.push('/');
+  };
+
+  const openLogin = () => {
+    setIsOpen(false);
+    loginModal.open();
+  };
+
+  const openSignup = () => {
+    setIsOpen(false);
+    signupModal.open();
+  };
 
   return (
     <div className="p-2 relative inline-block border rounded-full">
@@ -47,21 +78,24 @@ const UserNav = () => {
 
       {isOpen && (
         <div className="w-[220px] absolute top-[60px] right-0 bg-white border rounded-xl shadow-md flex flex-col cursor-pointer">
-          <MenuLink
-            label="Log in"
-            onClick={() => {
-              setIsOpen(false);
-              loginModal.open();
-            }}
-          />
+          {userId ? (
+            <MenuLink
+              label="Log out"
+              onClick={logout}
+            />
+          ) : (
+            <>
+              <MenuLink
+                label="Log in"
+                onClick={openLogin}
+              />
 
-          <MenuLink
-            label="Sign up"
-            onClick={() => {
-              setIsOpen(false);
-              signupModal.open();
-            }}
-          />
+              <MenuLink
+                label="Sign up"
+                onClick={openSignup}
+              />
+            </>
+          )}
         </div>
       )}
     </div>
