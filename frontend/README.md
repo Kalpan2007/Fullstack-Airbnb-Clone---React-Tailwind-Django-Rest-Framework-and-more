@@ -1,15 +1,16 @@
 # DjangoBNB - Full Stack Airbnb Clone
 
-A full-stack Airbnb clone built with **Next.js** (React, TypeScript, Tailwind CSS) frontend and **Django REST Framework** backend with JWT authentication.
+A full-stack Airbnb clone built with **Next.js** (React, TypeScript, Tailwind CSS) frontend and **Django REST Framework** backend with JWT authentication and real-time WebSocket chat.
 
 ## Tech Stack
 
 | Layer | Technology |
 |-------|-----------|
 | Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4 |
-| Backend | Django 5, Django REST Framework, SimpleJWT |
+| Backend | Django 5, Django REST Framework, SimpleJWT, Daphne (ASGI) |
 | Database | PostgreSQL (Docker) / SQLite (local) |
 | Auth | JWT (access + refresh tokens), httpOnly cookies |
+| Real-time | WebSockets (Django Channels), react-use-websocket |
 | State | Zustand |
 | UI | react-date-range, react-select, world-countries |
 
@@ -20,7 +21,7 @@ A full-stack Airbnb clone built with **Next.js** (React, TypeScript, Tailwind CS
 cd backend
 docker-compose up --build
 ```
-Backend runs at `http://localhost:8000`
+Backend runs at `http://localhost:8000` (Daphne ASGI for WebSocket support)
 
 ### Admin Panel
 - URL: `http://localhost:8000/admin/`
@@ -64,6 +65,9 @@ Frontend runs at `http://localhost:3000`
 | 19 | Responsive design (Tailwind) | Done |
 | 20 | Error handling on forms | Done |
 | 21 | Booking button loading state + success/error messages | Done |
+| 22 | Messaging/inbox system (real-time WebSocket) | Done |
+| 23 | Contact landlord (starts conversation) | Done |
+| 24 | Chat icon in navbar | Done |
 
 ### Not Implemented
 
@@ -73,9 +77,7 @@ Frontend runs at `http://localhost:3000`
 | 2 | Category filtering from homepage tabs | UI only, no query propagation |
 | 3 | Property update/edit | Not started |
 | 4 | Property delete | Not started |
-| 5 | Messaging/inbox system | Mock data only |
-| 6 | Contact landlord | Static button |
-| 7 | Booking cancellation | Not started |
+| 5 | Booking cancellation | Not started |
 
 ---
 
@@ -106,3 +108,26 @@ Frontend runs at `http://localhost:3000`
 | GET | `/api/myproperties/` | Current user's properties |
 | GET | `/api/myfavorites/` | Current user's favorites |
 | GET | `/api/{id}/` | Landlord profile (public) |
+
+### Chat
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/chat/` | List user's conversations |
+| GET | `/api/chat/start/{user_id}/` | Start or get existing conversation |
+| GET | `/api/chat/{id}/` | Get conversation with messages |
+
+### WebSocket
+| URL | Description |
+|-----|-------------|
+| `ws://localhost:8000/ws/{conversation_id}/?token={jwt}` | Real-time messaging |
+
+---
+
+## WebSocket Chat
+
+The chat system uses Django Channels with Daphne for real-time messaging:
+
+- **Backend**: `chat` app with `Conversation` and `ConversationMessage` models
+- **Consumer**: `ChatConsumer` handles WebSocket connections and message broadcasting
+- **Auth**: JWT token passed as query parameter for WebSocket authentication
+- **Frontend**: `react-use-websocket` library for WebSocket client
