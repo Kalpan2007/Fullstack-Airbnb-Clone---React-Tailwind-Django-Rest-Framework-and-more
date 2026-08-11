@@ -16,6 +16,8 @@
 - [x] Create reusable modal component
 - [x] Login modal (handle error messages)
 - [x] Sign Up modal (handle error messages)
+- [x] Add property modal (multi-step)
+- [x] Country select component (react-select + world-countries)
 
 ---
 
@@ -41,15 +43,15 @@
 
 ### Properties
 
-- [ ] Add property from Next.js
-  - [ ] Create modal
-  - [ ] Create API endpoint
-  - [ ] Send property data
-- [ ] Dynamic property details page
-- [ ] Book property
-- [ ] Dynamic landlord page
-- [ ] Dynamic My Properties page
-- [ ] Dynamic My Reservations page
+- [x] Add property from Next.js
+  - [x] Create modal
+  - [x] Create API endpoint
+  - [x] Send property data
+- [x] Dynamic property details page
+- [x] Book property
+- [x] Dynamic landlord page
+- [x] Dynamic My Properties page
+- [x] Dynamic My Reservations page
 - [ ] Add/Remove favorites
 - [ ] My Favorites page
 - [ ] Dynamic conversations
