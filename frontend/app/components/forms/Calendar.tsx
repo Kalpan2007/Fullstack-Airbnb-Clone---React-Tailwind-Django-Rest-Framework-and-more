@@ -1,34 +1,34 @@
-"use client";
+'use client';
 
-import { DateRangePicker, RangeKeyDict } from "react-date-range";
-import "react-date-range/dist/styles.css";
-import "react-date-range/dist/theme/default.css";
+import { DateRange, Range, RangeKeyDict } from 'react-date-range';
+
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 interface DatePickerProps {
-    value: RangeKeyDict;
-    bookedDates: Date[];
+    value: Range,
     onChange: (value: RangeKeyDict) => void;
+    bookedDates?: Date[];
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
     value,
-    bookedDates,
     onChange,
+    bookedDates
 }) => {
-    const disabledDates = bookedDates.map((date) => date);
-
     return (
-        <DateRangePicker
+        <DateRange
+            className='w-full border border-gray-400 rounded-xl mb-4'
+            rangeColors={['#262626']}
+            ranges={[value]}
+            date={new Date()}
             onChange={onChange}
-            showSelectionPreview={true}
-            moveRangeOnFirstSelection={false}
-            months={2}
-            ranges={[value.selection]}
-            direction="horizontal"
+            direction='vertical'
+            showDateDisplay={false}
             minDate={new Date()}
-            disabledDates={disabledDates}
+            disabledDates={bookedDates}
         />
-    );
-};
+    )
+}
 
 export default DatePicker;

@@ -37,11 +37,18 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
     const [minDate, setMinDate] = useState<Date>(new Date());
     const [bookedDates, setBookedDates] = useState<Date[]>([]);
     const [guests, setGuests] = useState<string>('1');
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [bookingMessage, setBookingMessage] = useState<{type: 'success' | 'error', text: string} | null>(null);
     const guestsRange = Array.from({ length: property.guests }, (_, index) => index + 1)
 
     const performBooking = async () => {
+        if (isSubmitting) return;
+
         if (userId) {
             if (dateRange.startDate && dateRange.endDate) {
+                setIsSubmitting(true);
+                setBookingMessage(null);
+
                 const formData = new FormData();
                 formData.append('guests', guests);
                 formData.append('start_date', format(dateRange.startDate, 'yyyy-MM-dd'));
@@ -49,12 +56,18 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
                 formData.append('number_of_nights', nights.toString());
                 formData.append('total_price', totalPrice.toString());
 
-                const response = await apiService.post(`/api/properties/${property.id}/book/`, formData);
+                try {
+                    const response = await apiService.post(`/api/properties/${property.id}/book/`, formData);
 
-                if (response.success) {
-                    console.log('Booking successful')
-                } else {
-                    console.log('Something went wrong...');
+                    if (response.success) {
+                        setBookingMessage({ type: 'success', text: 'Booking successful! Your reservation is confirmed.' });
+                    } else {
+                        setBookingMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
+                    }
+                } catch (error) {
+                    setBookingMessage({ type: 'error', text: 'Something went wrong. Please try again.' });
+                } finally {
+                    setIsSubmitting(false);
                 }
             }
         } else {
@@ -145,10 +158,24 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
 
             <div 
                 onClick={performBooking}
-                className="w-full mb-6 py-6 text-center text-white bg-airbnb hover:bg-airbnb-dark rounded-xl"
+                className={`w-full mb-6 py-6 text-center text-white rounded-xl transition ${
+                    isSubmitting 
+                        ? 'bg-gray-400 cursor-not-allowed' 
+                        : 'bg-airbnb hover:bg-airbnb-dark cursor-pointer'
+                }`}
             >
-                Book
+                {isSubmitting ? 'Booking...' : 'Book'}
             </div>
+
+            {bookingMessage && (
+                <div className={`mb-4 p-3 rounded-xl text-center text-sm font-medium ${
+                    bookingMessage.type === 'success' 
+                        ? 'bg-green-100 text-green-800 border border-green-300' 
+                        : 'bg-red-100 text-red-800 border border-red-300'
+                }`}>
+                    {bookingMessage.text}
+                </div>
+            )}
 
             <div className="mb-4 flex justify-between align-center">
                 <p>${property.price_per_night} * {nights} nights</p>

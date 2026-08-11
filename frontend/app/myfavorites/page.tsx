@@ -3,10 +3,10 @@ import Link from "next/link";
 
 import { getAccessToken } from "@/app/lib/actions";
 
-const MyPropertiesPage = async () => {
+const MyFavoritesPage = async () => {
     const token = await getAccessToken();
 
-    const res = await fetch(`http://localhost:8000/api/myproperties/`, {
+    const res = await fetch(`http://localhost:8000/api/myfavorites/`, {
         cache: 'no-store',
         headers: {
             'Accept': 'application/json',
@@ -15,17 +15,17 @@ const MyPropertiesPage = async () => {
         }
     });
     const data = await res.json();
-    const properties = Array.isArray(data) ? data : [];
+    const favorites = Array.isArray(data?.data) ? data.data : [];
 
     return (
         <main className="max-w-[1500px] mx-auto px-6 pb-6">
-            <h1 className="my-6 text-2xl">My properties</h1>
+            <h1 className="my-6 text-2xl">My favorites</h1>
 
-            {properties.length === 0 ? (
-                <p className="text-gray-500">You have no properties yet.</p>
+            {favorites.length === 0 ? (
+                <p className="text-gray-500">You have no favorites yet.</p>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
-                    {properties.map((property: any) => (
+                    {favorites.map((property: any) => (
                         <Link
                             key={property.id}
                             href={`/properties/${property.id}`}
@@ -37,7 +37,7 @@ const MyPropertiesPage = async () => {
                                     src={property.image_url}
                                     sizes="(max-width: 768px) 768px, (max-width: 1200px): 768px, 768px"
                                     className="hover:scale-110 object-cover transition h-full w-full"
-                                    alt="Your property"
+                                    alt="Favorite property"
                                 />
                             </div>
 
@@ -56,4 +56,4 @@ const MyPropertiesPage = async () => {
     );
 };
 
-export default MyPropertiesPage;
+export default MyFavoritesPage;
