@@ -1,7 +1,7 @@
 services:
   web:
     build: ./djangobnb_backend
-    command: python manage.py runserver 0.0.0.0:8000
+    command: daphne -b 0.0.0.0 -p 8000 djangobnb_backend.asgi:application
     volumes:
       - ./djangobnb_backend/:/usr/src/djangobnb_backend/
     ports:

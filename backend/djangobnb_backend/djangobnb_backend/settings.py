@@ -96,6 +96,7 @@ INSTALLED_APPS = [
 
     'property',
     'useraccount',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -128,6 +129,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'djangobnb_backend.wsgi.application'
+ASGI_APPLICATION = 'djangobnb_backend.asgi.application'
 ASGI_APPLICATION = 'djangobnb_backend.asgi.application'
 
 SQL_ENGINE = os.environ.get("SQL_ENGINE", "")
