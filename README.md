@@ -52,8 +52,8 @@
 - [x] Dynamic landlord page
 - [x] Dynamic My Properties page
 - [x] Dynamic My Reservations page
-- [ ] Add/Remove favorites
-- [ ] My Favorites page
+- [x] Add/Remove favorites
+- [x] My Favorites page
 - [ ] Dynamic conversations
 
 ---

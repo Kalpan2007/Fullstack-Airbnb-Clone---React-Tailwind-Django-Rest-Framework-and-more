@@ -1,36 +1,108 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DjangoBNB - Full Stack Airbnb Clone
 
-## Getting Started
+A full-stack Airbnb clone built with **Next.js** (React, TypeScript, Tailwind CSS) frontend and **Django REST Framework** backend with JWT authentication.
 
-First, run the development server:
+## Tech Stack
 
+| Layer | Technology |
+|-------|-----------|
+| Frontend | Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4 |
+| Backend | Django 5, Django REST Framework, SimpleJWT |
+| Database | PostgreSQL (Docker) / SQLite (local) |
+| Auth | JWT (access + refresh tokens), httpOnly cookies |
+| State | Zustand |
+| UI | react-date-range, react-select, world-countries |
+
+## Setup
+
+### Backend (Docker)
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd backend
+docker-compose up --build
 ```
+Backend runs at `http://localhost:8000`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Admin Panel
+- URL: `http://localhost:8000/admin/`
+- Email: `admin@djangobnb.com`
+- Password: `admin123`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Frontend runs at `http://localhost:3000`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Features
 
-To learn more about Next.js, take a look at the following resources:
+### Implemented
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| # | Feature | Status |
+|---|---------|--------|
+| 1 | Home page with property grid | Done |
+| 2 | Property detail page | Done |
+| 3 | User signup (modal) | Done |
+| 4 | User login (modal) | Done |
+| 5 | User logout | Done |
+| 6 | JWT token management (auto-refresh) | Done |
+| 7 | Property creation (5-step modal wizard) | Done |
+| 8 | Property listing with filters (backend) | Done |
+| 9 | Image upload for properties | Done |
+| 10 | Book a property (date picker + guests) | Done |
+| 11 | View booked dates on calendar | Done |
+| 12 | My reservations page | Done |
+| 13 | Add/remove favorite (heart toggle) | Done |
+| 14 | My favorites page | Done |
+| 15 | My properties page | Done |
+| 16 | Landlord profile page | Done |
+| 17 | Category tabs (Beach, Villas, Cabins, Tiny homes) | Done |
+| 18 | Django admin panel (Users, Properties, Reservations) | Done |
+| 19 | Responsive design (Tailwind) | Done |
+| 20 | Error handling on forms | Done |
+| 21 | Booking button loading state + success/error messages | Done |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Not Implemented
 
-## Deploy on Vercel
+| # | Feature | Status |
+|---|---------|--------|
+| 1 | Search filters UI (Where/When/Who) | Static only |
+| 2 | Category filtering from homepage tabs | UI only, no query propagation |
+| 3 | Property update/edit | Not started |
+| 4 | Property delete | Not started |
+| 5 | Messaging/inbox system | Mock data only |
+| 6 | Contact landlord | Static button |
+| 7 | Booking cancellation | Not started |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## API Endpoints
+
+### Auth
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| POST | `/api/register/` | User registration |
+| POST | `/api/login/` | User login (returns JWT) |
+| POST | `/api/logout/` | User logout (blacklists token) |
+| POST | `/api/token/refresh/` | Refresh access token |
+
+### Properties
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/properties/` | List properties (supports filters) |
+| GET | `/api/properties/{id}/` | Property detail |
+| POST | `/api/properties/create/` | Create property (auth required) |
+| POST | `/api/properties/{id}/book/` | Book property (auth required) |
+| GET | `/api/properties/{id}/reservations/` | Get property reservations |
+| POST | `/api/properties/{id}/toggle_favorite/` | Toggle favorite (auth required) |
+
+### User
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/api/myreservations/` | Current user's reservations |
+| GET | `/api/myproperties/` | Current user's properties |
+| GET | `/api/myfavorites/` | Current user's favorites |
+| GET | `/api/{id}/` | Landlord profile (public) |
