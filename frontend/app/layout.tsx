@@ -20,7 +20,7 @@ export default function RootLayout({
       <body>
         <Navbar />
 
-        <div className="pt-[100px]">{children}</div>
+        <div className="pt-[120px]">{children}</div>
 
         <LoginModal />
         <SignupModal />

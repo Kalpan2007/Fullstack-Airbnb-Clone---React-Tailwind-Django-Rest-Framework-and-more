@@ -4,6 +4,7 @@ import Link from "next/link";
 import SearchFilters from "./SearchFilters";
 import UserNav from "./UserNav";
 import AddPropertyButton from "./AddPropertyButton";
+import InboxButton from "./InboxButton";
 import { getUserId } from "@/app/lib/actions";
 
 const Navbar = async () => {
@@ -29,6 +30,7 @@ const Navbar = async () => {
 
           <div className="flex items-center space-x-6">
             <AddPropertyButton userId={userId} />
+            <InboxButton userId={userId} />
             <UserNav />
           </div>
         </div>
