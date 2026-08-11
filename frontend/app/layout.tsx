@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "./components/navbar/Navbar";
 import LoginModal from "./components/modals/LoginModal";
+import SearchModal from "./components/modals/SearchModal";
 import SignupModal from "./components/modals/SignupModal";
 import AddPropertyModal from "./components/modals/AddPropertyModal";
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <div className="pt-[120px]">{children}</div>
 
         <LoginModal />
+        <SearchModal />
         <SignupModal />
         <AddPropertyModal />
       </body>

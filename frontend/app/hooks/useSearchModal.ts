@@ -12,14 +12,16 @@ interface SearchQuery {
 
 interface SearchModalStore {
     isOpen: boolean;
+    step: string;
     query: SearchQuery;
-    open: () => void;
+    open: (step?: string) => void;
     close: () => void;
     setQuery: (query: Partial<SearchQuery>) => void;
 }
 
 const useSearchModal = create<SearchModalStore>((set) => ({
     isOpen: false,
+    step: 'location',
     query: {
         country: '',
         guests: null,
@@ -29,8 +31,8 @@ const useSearchModal = create<SearchModalStore>((set) => ({
         checkOut: null,
         category: '',
     },
-    open: () => set({ isOpen: true }),
-    close: () => set({ isOpen: false }),
+    open: (step = 'location') => set({ isOpen: true, step }),
+    close: () => set({ isOpen: false, step: 'location' }),
     setQuery: (query) => set((state) => ({ query: { ...state.query, ...query } })),
 }));
 

@@ -1,39 +1,97 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import Image from "next/image";
-
-const categories = [
-  { key: "beach", label: "Beach" },
-  { key: "villas", label: "Villas" },
-  { key: "cabins", label: "Cabins" },
-  { key: "tiny_homes", label: "Tiny homes" },
-];
+import { useState } from 'react';
+import Image from 'next/image';
+import useSearchModal, { SearchQuery } from '../hooks/useSearchModal';
 
 const Categories = () => {
-  const [category, setCategory] = useState("beach");
+    const searchModal = useSearchModal();
+    const [category, setCategory] = useState('');
 
-  return (
-    <div className="pt-3 cursor-pointer pb-6 flex items-center space-x-12">
-      {categories.map((item) => (
-        <div
-          key={item.key}
-          onClick={() => setCategory(item.key)}
-          className={`pb-4 flex flex-col items-center space-y-2 border-b-2 ${
-            category === item.key ? "border-black" : "border-white"
-          } opacity-60 hover:border-gray-200 hover:opacity-100`}
-        >
-          <Image
-            src="/icn_category_beach.jpeg"
-            alt={`Category - ${item.label}`}
-            width={20}
-            height={20}
-          />
-          <span className="text-xs">{item.label}</span>
+    const _setCategory = (_category: string) => {
+        setCategory(_category);
+
+        const query: SearchQuery = {
+            country: searchModal.query.country,
+            checkIn: searchModal.query.checkIn,
+            checkOut: searchModal.query.checkOut,
+            guests: searchModal.query.guests,
+            bedrooms: searchModal.query.bedrooms,
+            bathrooms: searchModal.query.bathrooms,
+            category: _category
+        }
+
+        searchModal.setQuery(query);
+    }
+
+    return (
+        <div className="pt-3 cursor-pointer pb-6 flex items-center space-x-12">
+            <div
+                onClick={() => _setCategory('')}
+                className={`pb-4 flex flex-col items-center space-y-2 border-b-2 ${category == '' ? 'border-black' : 'border-white'} opacity-60 hover:border-gray-200 hover:opacity-100`}>
+                <Image
+                    src="/icn_category_beach.jpeg"
+                    alt="Category - All"
+                    width={20}
+                    height={20}
+                />
+
+                <span className='text-xs'>All</span>
+            </div>
+
+            <div
+                onClick={() => _setCategory('beach')}
+                className={`pb-4 flex flex-col items-center space-y-2 border-b-2 ${category == 'beach' ? 'border-black' : 'border-white'} opacity-60 hover:border-gray-200 hover:opacity-100`}>
+                <Image
+                    src="/icn_category_beach.jpeg"
+                    alt="Category - Beach"
+                    width={20}
+                    height={20}
+                />
+
+                <span className='text-xs'>Beach</span>
+            </div>
+
+            <div
+                onClick={() => _setCategory('villa')}
+                className={`pb-4 flex flex-col items-center space-y-2 border-b-2 ${category == 'villa' ? 'border-black' : 'border-white'} opacity-60 hover:border-gray-200 hover:opacity-100`}>
+                <Image
+                    src="/icn_category_beach.jpeg"
+                    alt="Category - Villas"
+                    width={20}
+                    height={20}
+                />
+
+                <span className='text-xs'>Villas</span>
+            </div>
+
+            <div
+                onClick={() => _setCategory('cabins')}
+                className={`pb-4 flex flex-col items-center space-y-2 border-b-2 ${category == 'cabins' ? 'border-black' : 'border-white'} opacity-60 hover:border-gray-200 hover:opacity-100`}>
+                <Image
+                    src="/icn_category_beach.jpeg"
+                    alt="Category - Cabins"
+                    width={20}
+                    height={20}
+                />
+
+                <span className='text-xs'>Cabins</span>
+            </div>
+
+            <div
+                onClick={() => _setCategory('tiny-homes')}
+                className={`pb-4 flex flex-col items-center space-y-2 border-b-2 ${category == 'tiny-homes' ? 'border-black' : 'border-white'} opacity-60 hover:border-gray-200 hover:opacity-100`}>
+                <Image
+                    src="/icn_category_beach.jpeg"
+                    alt="Category - Tiny homes"
+                    width={20}
+                    height={20}
+                />
+
+                <span className='text-xs'>Tiny homes</span>
+            </div>
         </div>
-      ))}
-    </div>
-  );
-};
+    )
+}
 
 export default Categories;
