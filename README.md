@@ -54,18 +54,18 @@
 - [x] Dynamic My Reservations page
 - [x] Add/Remove favorites
 - [x] My Favorites page
-- [ ] Dynamic conversations
+- [x] Dynamic conversations
 
 ---
 
 ## Chat (WebSockets)
 
-- [ ] Set up WebSockets in Django
-- [ ] Connect frontend and backend
-- [ ] Send and receive messages
-- [ ] Store chat messages
-- [ ] Load previous messages
-- [ ] Start new conversation
+- [x] Set up WebSockets in Django
+- [x] Connect frontend and backend
+- [x] Send and receive messages
+- [x] Store chat messages
+- [x] Load previous messages
+- [x] Start new conversation
 
 ---
 
