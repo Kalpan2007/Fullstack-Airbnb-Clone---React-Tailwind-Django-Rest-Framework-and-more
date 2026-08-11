@@ -71,13 +71,13 @@
 
 ## Search
 
-- [ ] Search filters
-  - [ ] Search modal
-  - [ ] Country search
-  - [ ] Check-in / Check-out calendar
-  - [ ] Guests, bedrooms, bathrooms filters
-  - [ ] Search API endpoint
-  - [ ] Category filter
+- [x] Search filters
+  - [x] Search modal
+  - [x] Country search
+  - [x] Check-in / Check-out calendar
+  - [x] Guests, bedrooms, bathrooms filters
+  - [x] Search API endpoint
+  - [x] Category filter
 
 ---
 
