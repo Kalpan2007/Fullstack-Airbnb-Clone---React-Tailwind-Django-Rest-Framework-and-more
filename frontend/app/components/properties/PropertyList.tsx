@@ -34,6 +34,7 @@ const PropertyList: React.FC<PropertyListProps> = ({
     const checkoutDate = searchModal.query.checkOut;
     const category = searchModal.query.category;
     const [properties, setProperties] = useState<PropertyType[]>([]);
+    const [showCount, setShowCount] = useState(10);
 
     const markFavorite = (id: string, is_favorite: boolean) => {
         const tmpProperties = properties.map((property: PropertyType) => {
@@ -107,11 +108,15 @@ const PropertyList: React.FC<PropertyListProps> = ({
 
     useEffect(() => {
         getProperties();
+        setShowCount(10);
     }, [category, searchModal.query, params]);
+
+    const displayedProperties = properties.slice(0, showCount);
+    const hasMore = showCount < properties.length;
 
     return (
         <>
-            {properties.map((property) => {
+            {displayedProperties.map((property) => {
                 return (
                     <PropertyListItem 
                         key={property.id}
@@ -120,6 +125,17 @@ const PropertyList: React.FC<PropertyListProps> = ({
                     />
                 )
             })}
+
+            {hasMore && (
+                <div className="col-span-full flex justify-center mt-6">
+                    <button
+                        onClick={() => setShowCount(prev => prev + 5)}
+                        className="px-8 py-3 border border-gray-300 rounded-xl hover:bg-gray-100 transition font-medium"
+                    >
+                        Show more
+                    </button>
+                </div>
+            )}
         </>
     )
 }
