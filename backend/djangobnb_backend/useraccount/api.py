@@ -5,7 +5,8 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from .models import User
 from .serializers import UserDetailSerializer
 
-from property.serializers import ReservationsListSerializer
+from property.models import Property
+from property.serializers import ReservationsListSerializer, PropertiesListSerializer
 
 
 @api_view(['GET'])
@@ -22,9 +23,21 @@ def landlord_detail(request, pk):
 @api_view(['GET'])
 def reservations_list(request):
     reservations = request.user.reservations.all()
-
-    print('user', request.user)
-    print(reservations)
     
     serializer = ReservationsListSerializer(reservations, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET'])
+def myproperties_list(request):
+    properties = Property.objects.filter(landlord=request.user)
+    serializer = PropertiesListSerializer(properties, many=True)
+    return JsonResponse(serializer.data, safe=False)
+
+
+@api_view(['GET'])
+def myfavorites_list(request):
+    properties = Property.objects.filter(favorited=request.user)
+    favorites = [p.id for p in properties]
+    serializer = PropertiesListSerializer(properties, many=True)
+    return JsonResponse({'data': serializer.data, 'favorites': favorites})
