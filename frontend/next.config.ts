@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: '*.onrender.com',
+        hostname: 'djangobnb-backend-0bj3.onrender.com',
       },
     ],
   },
