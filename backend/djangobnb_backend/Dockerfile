@@ -17,10 +17,9 @@ RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY ./entrypoint.sh .
-RUN sed -i 's/\r$//g' /usr/src/djangobnb_backend/entrypoint.sh
-RUN chmod +x /usr/src/djangobnb_backend/entrypoint.sh
-
 COPY . .
 
-ENTRYPOINT ["/usr/src/djangobnb_backend/entrypoint.sh"]
+RUN chmod +x entrypoint.sh
+RUN sed -i 's/\r$//g' entrypoint.sh
+
+CMD ["sh", "-c", "python manage.py migrate --noinput && python manage.py collectstatic --noinput && daphne -b 0.0.0.0 -p ${PORT:-8000} djangobnb_backend.asgi:application"]
