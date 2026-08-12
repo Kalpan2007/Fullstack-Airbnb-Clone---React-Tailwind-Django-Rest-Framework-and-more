@@ -26,12 +26,12 @@ const SearchModal = () => {
 
     const closeAndSearch = () => {
         const newSearchQuery: SearchQuery = {
-            country: country?.label,
-            checkIn: dateRange.startDate,
-            checkOut: dateRange.endDate,
-            guests: parseInt(numGuests),
-            bedrooms: parseInt(numBedrooms),
-            bathrooms: parseInt(numBathrooms),
+            country: country?.label || '',
+            checkIn: dateRange.startDate || null,
+            checkOut: dateRange.endDate || null,
+            guests: parseInt(numGuests) || null,
+            bedrooms: parseInt(numBedrooms) || null,
+            bathrooms: parseInt(numBathrooms) || null,
             category: searchModal.query.category
         }
 

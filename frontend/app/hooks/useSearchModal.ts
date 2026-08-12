@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-interface SearchQuery {
+export interface SearchQuery {
     country: string;
     guests: number | null;
     bathrooms: number | null;

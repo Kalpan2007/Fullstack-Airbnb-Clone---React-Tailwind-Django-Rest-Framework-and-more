@@ -2,6 +2,8 @@
 
 import { cookies } from 'next/headers';
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 export async function handleRefresh() {
     console.log('handleRefresh');
 
@@ -12,7 +14,7 @@ export async function handleRefresh() {
     }
 
     try {
-        const response = await fetch('http://localhost:8000/api/token/refresh/', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/token/refresh/`, {
             method: 'POST',
             body: JSON.stringify({
                 refresh: refreshToken
@@ -30,7 +32,8 @@ export async function handleRefresh() {
             const c = await cookies();
             c.set('session_access_token', json.access, {
                 httpOnly: true,
-                secure: false,
+                secure: isProduction,
+                sameSite: 'lax',
                 maxAge: 60 * 60,
                 path: '/'
             });
@@ -50,21 +53,24 @@ export async function handleLogin(userId: string, accessToken: string, refreshTo
 
     c.set('session_userid', userId, {
         httpOnly: true,
-        secure: false,
+        secure: isProduction,
+        sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7,
         path: '/'
     });
 
     c.set('session_access_token', accessToken, {
         httpOnly: true,
-        secure: false,
+        secure: isProduction,
+        sameSite: 'lax',
         maxAge: 60 * 60,
         path: '/'
     });
 
     c.set('session_refresh_token', refreshToken, {
         httpOnly: true,
-        secure: false,
+        secure: isProduction,
+        sameSite: 'lax',
         maxAge: 60 * 60 * 24 * 7,
         path: '/'
     });
@@ -83,7 +89,7 @@ export async function handleLogout() {
 
     if (refreshToken) {
         try {
-            await fetch('http://localhost:8000/api/logout/', {
+            await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/logout/`, {
                 method: 'POST',
                 body: JSON.stringify({ refresh: refreshToken }),
                 headers: {

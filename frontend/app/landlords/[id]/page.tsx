@@ -9,7 +9,7 @@ const LandlordDetailPage = async ({params}: { params: Promise<{id: string }> }) 
     const { id } = await params;
     const userId = await getUserId();
 
-    const res = await fetch(`http://localhost:8000/api/${id}/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/${id}/`, {
         cache: 'no-store',
     });
     const landlord = await res.json();

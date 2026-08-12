@@ -34,7 +34,7 @@ const InboxPage = async () => {
         )
     }
 
-    const res = await fetch(`http://localhost:8000/api/chat/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/chat/`, {
         cache: 'no-store',
         headers: {
             'Accept': 'application/json',

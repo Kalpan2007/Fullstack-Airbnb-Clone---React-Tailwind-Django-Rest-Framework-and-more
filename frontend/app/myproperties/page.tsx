@@ -6,7 +6,7 @@ import { getAccessToken } from "@/app/lib/actions";
 const MyPropertiesPage = async () => {
     const token = await getAccessToken();
 
-    const res = await fetch(`http://localhost:8000/api/myproperties/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/myproperties/`, {
         cache: 'no-store',
         headers: {
             'Accept': 'application/json',

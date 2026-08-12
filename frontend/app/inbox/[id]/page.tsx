@@ -22,7 +22,7 @@ const ConversationPage = async ({ params }: { params: Promise<{ id: string }> })
         )
     }
 
-    const res = await fetch(`http://localhost:8000/api/chat/${id}/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/chat/${id}/`, {
         cache: 'no-store',
         headers: {
             'Accept': 'application/json',

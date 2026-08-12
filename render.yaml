@@ -1,0 +1,34 @@
+services:
+  - type: web
+    name: djangobnb-backend
+    runtime: docker
+    dockerfilePath: ./backend/djangobnb_backend/Dockerfile
+    dockerContext: ./backend/djangobnb_backend
+    envVars:
+      - key: DEBUG
+        value: false
+      - key: SECRET_KEY
+        generateValue: true
+      - key: SIGNING_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: djangobnb-db
+          property: connectionString
+      - key: ALLOWED_HOSTS
+        sync: false
+      - key: CORS_ALLOWED_ORIGINS
+        sync: false
+      - key: CSRF_TRUSTED_ORIGINS
+        sync: false
+      - key: WEBSITE_URL
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+    healthCheckPath: /
+    autoDeploy: true
+
+  - type: postgres
+    name: djangobnb-db
+    plan: free
+    databaseName: djangobnb

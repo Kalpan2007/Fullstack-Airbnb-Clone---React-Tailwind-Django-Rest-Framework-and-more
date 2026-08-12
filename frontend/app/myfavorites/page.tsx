@@ -6,7 +6,7 @@ import { getAccessToken } from "@/app/lib/actions";
 const MyFavoritesPage = async () => {
     const token = await getAccessToken();
 
-    const res = await fetch(`http://localhost:8000/api/myfavorites/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/myfavorites/`, {
         cache: 'no-store',
         headers: {
             'Accept': 'application/json',

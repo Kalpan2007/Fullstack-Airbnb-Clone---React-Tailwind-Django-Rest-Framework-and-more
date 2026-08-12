@@ -6,7 +6,7 @@ import { getUserId } from "@/app/lib/actions";
 const PropertyDetailPage = async ({params}: { params: Promise<{id: string }> }) => {
     const { id } = await params;
 
-    const propertyRes = await fetch(`http://localhost:8000/api/properties/${id}/`, {
+    const propertyRes = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/properties/${id}/`, {
         cache: 'no-store',
     });
     const property = await propertyRes.json();

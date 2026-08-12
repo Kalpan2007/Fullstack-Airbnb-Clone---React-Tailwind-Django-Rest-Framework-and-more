@@ -6,7 +6,7 @@ import { getAccessToken } from "@/app/lib/actions";
 const MyReservationsPage = async () => {
     const token = await getAccessToken();
 
-    const res = await fetch(`http://localhost:8000/api/myreservations/`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_HOST}/api/myreservations/`, {
         cache: 'no-store',
         headers: {
             'Accept': 'application/json',

@@ -35,7 +35,7 @@ const SearchFilters = () => {
 
                     <div className="cursor-pointer h-[48px] lg:h-[64px] px-8 flex flex-col justify-center rounded-full hover:bg-gray-100">
                         <p className="text-xs font-semibold">Who</p>
-                        <p className="text-sm">{guests > 1 ? `${guests} guests` : 'Add guests'}</p>
+                        <p className="text-sm">{guests && guests > 1 ? `${guests} guests` : 'Add guests'}</p>
                     </div>
                 </div>
             </div>

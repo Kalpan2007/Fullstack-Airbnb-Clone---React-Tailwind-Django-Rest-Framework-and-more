@@ -2,28 +2,23 @@ import os
 from datetime import timedelta
 from pathlib import Path
 from dotenv import load_dotenv
+import dj_database_url
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = os.environ.get("SECRET_KEY", "dev-insecure-key-change-in-production")
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
 
-if DEBUG:
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-else:
-    ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 
 AUTH_USER_MODEL = 'useraccount.User'
 
 SITE_ID = 1
 
-if DEBUG:
-    WEBSITE_URL = 'http://localhost:8000'
-else:
-    WEBSITE_URL = ''
+WEBSITE_URL = os.environ.get("WEBSITE_URL", "http://localhost:8000")
 
 CHANNEL_LAYERS = {
     'default': {
@@ -37,7 +32,7 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKEN": False,
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
-    "SIGNING_KEY": "acomplexkey",
+    "SIGNING_KEY": os.environ.get("SIGNING_KEY", "dev-signing-key-change-in-production"),
     "ALGORITHM": "HS512",
 }
 
@@ -56,17 +51,17 @@ REST_FRAMEWORK = {
     )
 }
 
-CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:3000',
-]
+CORS_ALLOWED_ORIGINS = os.environ.get(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:3000,http://127.0.0.1:3000"
+).split(",")
 
-CSRF_TRUSTED_ORIGINS = [
-    'http://127.0.0.1:8000',
-    'http://127.0.0.1:3000',
-]
+CSRF_TRUSTED_ORIGINS = os.environ.get(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://localhost:3000,http://127.0.0.1:3000"
+).split(",")
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = DEBUG
 
 REST_AUTH = {
     "USE_JWT": True,
@@ -130,28 +125,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'djangobnb_backend.wsgi.application'
 ASGI_APPLICATION = 'djangobnb_backend.asgi.application'
-ASGI_APPLICATION = 'djangobnb_backend.asgi.application'
 
-SQL_ENGINE = os.environ.get("SQL_ENGINE", "")
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-if SQL_ENGINE == "django.db.backends.postgresql":
+if DATABASE_URL:
     DATABASES = {
-        'default': {
-            'ENGINE': SQL_ENGINE,
-            'NAME': os.environ.get("SQL_DATABASE"),
-            'USER': os.environ.get("SQL_USER"),
-            'PASSWORD': os.environ.get("SQL_PASSWORD"),
-            'HOST': os.environ.get("SQL_HOST"),
-            'PORT': os.environ.get("SQL_PORT"),
-        }
+        'default': dj_database_url.parse(DATABASE_URL)
     }
 else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+    SQL_ENGINE = os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3")
+    if SQL_ENGINE == "django.db.backends.postgresql":
+        DATABASES = {
+            'default': {
+                'ENGINE': SQL_ENGINE,
+                'NAME': os.environ.get("SQL_DATABASE"),
+                'USER': os.environ.get("SQL_USER"),
+                'PASSWORD': os.environ.get("SQL_PASSWORD"),
+                'HOST': os.environ.get("SQL_HOST"),
+                'PORT': os.environ.get("SQL_PORT"),
+            }
         }
-    }
+    else:
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': BASE_DIR / 'db.sqlite3',
+            }
+        }
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
@@ -166,6 +166,8 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
